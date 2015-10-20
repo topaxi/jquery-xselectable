@@ -182,9 +182,9 @@
     var containerDimensions = $(el).data(pluginName).containerDimensions;
 
     // Browser window viewport dimensions
-    var width = typeof(window.innerWidth) == 'number' ?
+    var width = typeof(window.innerWidth) === 'number' ?
         window.innerWidth : document.documentElement.clientWidth;
-    var height = typeof(window.innerHeight) == 'number' ?
+    var height = typeof(window.innerHeight) === 'number' ?
         window.innerHeight : document.documentElement.clientHeight;
 
     // Browser document length
@@ -209,9 +209,9 @@
      *     positions are relative to the top-left corner of the document.
      */
     function getScrollBorders() {
-      var scrollTop = typeof(window.pageYOffset) == 'number' ?
+      var scrollTop = typeof(window.pageYOffset) === 'number' ?
           window.pageYOffset : document.documentElement.scrollTop;
-      var scrollLeft = typeof(window.pageXOffset) == 'number' ?
+      var scrollLeft = typeof(window.pageXOffset) === 'number' ?
           window.pageXOffset : document.documentElement.scrollLeft;
 
       return [scrollTop, scrollLeft + width, scrollTop + height, scrollLeft];
@@ -228,9 +228,9 @@
      *     respectively from the following margins: top, right, bottom, left.
      */
     function getScrollableDistances() {
-      var scrollTop = typeof(window.pageYOffset) == 'number' ?
+      var scrollTop = typeof(window.pageYOffset) === 'number' ?
           window.pageYOffset : document.documentElement.scrollTop;
-      var scrollLeft = typeof(window.pageXOffset) == 'number' ?
+      var scrollLeft = typeof(window.pageXOffset) === 'number' ?
           window.pageXOffset : document.documentElement.scrollLeft;
       return [
           Math.max(scrollTop - containerDimensions.top, 0), 
@@ -253,7 +253,7 @@
      *     upward / leftward.
      */
     function scroll(scrollAxis, shift) {
-      if (scrollAxis == 'vertical') {
+      if (scrollAxis === 'vertical') {
         window.scrollBy(0, shift);
       } else {
         window.scrollBy(shift, 0);
@@ -326,7 +326,7 @@
      *     upward / leftward.
      */
     function scroll(scrollAxis, shift) {
-      var property = scrollAxis == 'vertical' ? 'scrollTop' : 'scrollLeft';
+      var property = scrollAxis === 'vertical' ? 'scrollTop' : 'scrollLeft';
       el[property] += shift;
     }
 
@@ -576,7 +576,7 @@
         // Scroll in the desired direction
         scroller.scroll(metric.scrollAxis, shift);
 
-        if (scrollableElement == this) {
+        if (scrollableElement === this) {
           // If we scrolled the content of the selection container, move the
           // selection box starting position in the opposite direction by the
           // same amount, to keep its origin fixed (with respect to the
@@ -894,7 +894,7 @@
         return options[key];
       } else {
         options[key] = opt_value;
-        if (key == 'disabled') {
+        if (key === 'disabled') {
           (!!opt_value) ?
               methods.disable.apply(this) : methods.enable.apply(this);
         }
