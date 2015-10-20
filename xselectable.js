@@ -634,14 +634,20 @@
           $(selectable.element).addClass(pluginName + '-selected');
           selectable.selected = true;
           $this.trigger(
-              pluginName + 'selecting',
+              {
+                type: pluginName + 'selecting',
+                [pluginName]: {'selecting': selectable.element}
+              },
               {'selecting': selectable.element});
         }
       } else if (selectable.selected) {
         $(selectable.element).removeClass(pluginName + '-selected');
         selectable.selected = false;
         $this.trigger(
-            pluginName + 'unselecting',
+            {
+              type: pluginName + 'unselecting',
+              [pluginName]: {'unselecting': selectable.element}
+            },
             {'unselecting': selectable.element});
       }
     }
@@ -812,8 +818,12 @@
 
       // If selection ever started (we moved past the threshold distance),
       // fire the completion events.
-      $this.trigger(pluginName + 'selected', {'selected': selected});
-      $this.trigger(pluginName + 'unselected', {'unselected': unselected});
+      $this.trigger(
+          { type: pluginName + 'selected', [pluginName]: {'selected': selected} },
+          {'selected': selected});
+      $this.trigger(
+          { type: pluginName + 'unselected', [pluginName]: {'unselected': unselected} },
+          {'unselected': unselected});
       $this.trigger(pluginName + 'stop');
     }
   };
