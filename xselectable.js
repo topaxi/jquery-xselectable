@@ -233,7 +233,7 @@
       var scrollLeft = typeof(window.pageXOffset) === 'number' ?
           window.pageXOffset : document.documentElement.scrollLeft;
       return [
-          Math.max(scrollTop - containerDimensions.top, 0), 
+          Math.max(scrollTop - containerDimensions.top, 0),
           Math.max(
               containerDimensions.left + containerDimensions.width
               - scrollLeft - width, 0),
