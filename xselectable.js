@@ -168,6 +168,24 @@
     positioner: null
   };
 
+  var requestAnimationFrame = (function() {
+    return window.requestAnimationFrame       ||
+           window.webkitRequestAnimationFrame ||
+           window.mozRequestAnimationFrame    ||
+           function(callback) {
+             return window.setTimeout(callback, 1000 / 60);
+           };
+  })();
+
+  var cancelAnimationFrame = (function() {
+    return window.cancelAnimationFrame       ||
+           window.webkitCancelAnimationFrame ||
+           window.mozCancelAnimationFrame    ||
+           function(id) {
+             return window.clearTimeout(id);
+           };
+  })();
+
   /**
    * A scroller to handle native document (browser window) scrolling when the
    * selection container overflows the window viewport. It triggers when the
@@ -501,8 +519,8 @@
         scrollSpeedMultiplier = data.options.scrollSpeedMultiplier;
 
     if (data.scrollingTimeout) {
-      window.clearTimeout(data.scrollingTimeout);
-      delete data.scrollingTimeout;
+      cancelAnimationFrame(data.scrollingTimeout);
+      data.scrollingTimeout = void 0;
     }
 
     // Compute a multiplier based on the actual amount of time that
@@ -599,9 +617,7 @@
       // is detected (to handle the case when the mouse is moved toward a
       // viewport border and left stationary for the scrolling to continue at a
       // constant speed).
-      data.scrollingTimeout = window.setTimeout($.proxy(
-          function() { tick.call(this, evt, tickTimestamp); }, this),
-          16);  // try to keep scrolling at 60fps.
+      data.scrollingTimeout = requestAnimationFrame(tick.bind(this, evt, tickTimestamp));
     } else if (scroller.next) {
       // Delegate to a chained scroller, if present.
       updateViewportScrolling.call(this, evt, scroller.next, scrollTimestamp);
