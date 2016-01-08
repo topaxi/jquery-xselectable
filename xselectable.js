@@ -486,20 +486,22 @@
    */
   var updateSelectionBox = function(evt) {
     var data = $(this).data(pluginName);
-    data.selectionBoxExtents = {
-      // pageX, pageY positions are relative to the document, so they need
-      // to be converted to the selection container reference frame.
-      'top':
-          Math.min(data.startPosition.pageY, evt.pageY) -
-          data.containerDimensions.top +
-          this.scrollTop,
-      'left':
-          Math.min(data.startPosition.pageX, evt.pageX) -
-          data.containerDimensions.left +
-          this.scrollLeft,
-      'height': Math.abs(data.startPosition.pageY - evt.pageY),
-      'width': Math.abs(data.startPosition.pageX - evt.pageX)
-    };
+
+    // pageX, pageY positions are relative to the document, so they need
+    // to be converted to the selection container reference frame.
+    data.selectionBoxExtents.top =
+      Math.min(data.startPosition.pageY, evt.pageY) -
+      data.containerDimensions.top +
+      this.scrollTop;
+
+    data.selectionBoxExtents.left =
+      Math.min(data.startPosition.pageX, evt.pageX) -
+      data.containerDimensions.left +
+      this.scrollLeft;
+
+    data.selectionBoxExtents.height = Math.abs(data.startPosition.pageY - evt.pageY);
+    data.selectionBoxExtents.width  = Math.abs(data.startPosition.pageX - evt.pageX);
+
     data.selectionBox.css(data.selectionBoxExtents);
   };
 
@@ -732,8 +734,10 @@
     // Record the initial position of the mouse event, with respect to the
     // document (_not_ including the scrolling position of the selection
     // container).
-    data.startPosition = {'pageX': evt.pageX, 'pageY': evt.pageY};
-    data.curPosition = {'pageX': evt.pageX, 'pageY': evt.pageY};
+    data.startPosition.pageX = evt.pageX;
+    data.startPosition.pageY = evt.pageY;
+    data.curPosition.pageX = evt.pageX;
+    data.curPosition.pageY = evt.pageY;
 
     // Init the scroller
     data.scroller = (data.options.scroller || documentScroller).
@@ -781,7 +785,8 @@
     }
 
     data.lastPosition = data.curPosition;
-    data.curPosition = {'pageX': evt.pageX, 'pageY': evt.pageY};
+    data.curPosition.pageX = evt.pageX;
+    data.curPosition.pageY = evt.pageY;
 
     if (!data.selectionBox) {
       // Trigger the selection 'start' event.
@@ -861,7 +866,13 @@
       this.each(function() {
         $(this).data(
             pluginName,
-            {'options': $.extend({}, defaultOptions, options)});
+            {
+              'options': $.extend({}, defaultOptions, options),
+              'selectionBoxExtents': {},
+              'startPosition': {},
+              'curPosition': {},
+              'lastPosition': null
+            });
       });
       if (!!this.data(pluginName).options.disabled) {
         return this;
