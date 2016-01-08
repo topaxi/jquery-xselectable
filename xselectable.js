@@ -165,7 +165,10 @@
     // container, accurate at the time the call is made. 'width' and 'height'
     // must define the outer width and height (including border, but not
     // margin) of the selectable element.
-    positioner: null
+    positioner: null,
+
+    // Custom selection box updater implementation.
+    updateSelectionBox: null
   };
 
   var requestAnimationFrame = (function() {
@@ -736,6 +739,8 @@
     data.scroller = (data.options.scroller || documentScroller).
         call(this, this);
 
+    data.updateSelectionBox = data.options.updateSelectionBox || updateSelectionBox
+
     // Start listening for mouseup (to terminate selection), movement and
     // wheel scrolling. Mouseups and movement can occur everywhere in the
     // document, if the user moves the mouse outside the selection container.
@@ -794,7 +799,7 @@
     updateViewportScrolling.call(this, evt, scroller, scrollTimestamp);
 
     // update the selection box position and size.
-    updateSelectionBox.call(this, evt);
+    data.updateSelectionBox.call(this, evt);
 
     // mark elements as selected / deselected based on the current
     // selection box extent.
