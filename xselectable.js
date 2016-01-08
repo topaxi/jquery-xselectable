@@ -783,11 +783,11 @@
       $this.trigger(pluginName + 'start');
 
       // Create the selection box if we haven't created it yet.
-      createSelectionBox.apply(this);
+      createSelectionBox.call(this);
 
       // Compute the initial position and sizing of each selectable
       // object.
-      initSelectablesOnGestureStart.apply(this);
+      initSelectablesOnGestureStart.call(this);
     }
 
     // scroll the viewport if the mouse moves near the viewport boundaries.
@@ -861,7 +861,7 @@
       if (!!this.data(pluginName).options.disabled) {
         return this;
       }
-      return methods.enable.apply(this);
+      return methods.enable.call(this);
     },
 
     /**
@@ -872,7 +872,7 @@
      * progress will lead to undefined results.
      */
     destroy: function() {
-      methods.disable.apply(this);
+      methods.disable.call(this);
       return this.removeData(pluginName);
     },
 
@@ -922,7 +922,7 @@
         options[key] = opt_value;
         if (key === 'disabled') {
           (!!opt_value) ?
-              methods.disable.apply(this) : methods.enable.apply(this);
+              methods.disable.call(this) : methods.enable.call(this);
         }
         return this;
       }
