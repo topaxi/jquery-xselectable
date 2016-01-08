@@ -532,7 +532,7 @@
     // passed since the last scrolling update, to keep scrolling speed
     // constant as if scrolling occurred at exactly 60fps.
     var scrollLagMultiplier = scrollTimestamp ?
-        (new Date().getTime() - scrollTimestamp) / 16 : 1;
+        (Date.now() - scrollTimestamp) / 16 : 1;
     var tickTimestamp = scrollTimestamp;
 
     var scrolled = false;
