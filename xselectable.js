@@ -748,9 +748,8 @@
     // Start listening for mouseup (to terminate selection), movement and
     // wheel scrolling. Mouseups and movement can occur everywhere in the
     // document, if the user moves the mouse outside the selection container.
-    data.mouseupHandler = $.proxy(onMouseUp, this);
-    $(document).bind('mouseup.' + pluginName, data.mouseupHandler);
-    $(document).bind('mousemove.' + pluginName, $.proxy(tick, this));
+    $(document).bind('mouseup.' + pluginName, (data.onMouseUp || onMouseUp).bind(this));
+    $(document).bind('mousemove.' + pluginName, tick.bind(this));
 
     // Disable mousewheel scrolling during box selections.
     $this.bind('mousewheel.' + pluginName, function(evt) {
@@ -820,27 +819,26 @@
 
     if (data.scrollingTimeout) {
       window.clearTimeout(data.scrollingTimeout);
-      delete data.scrollingTimeout;
+      data.scrollingTimeout = undefined;
     }
 
     $this.unbind('mousewheel.' + pluginName);
     $(document).unbind('mousemove.' + pluginName);
-    $(document).unbind('mouseup.' + pluginName, data.mouseupHandler);
-    data.mouseupHandler = undefined;
+    $(document).unbind('mouseup.' + pluginName);
 
     if (!!data.selectionBox) {
       data.selectionBox.remove();
-      delete data.selectionBox;
+      data.selectionBox = undefined;
 
       data.selectionGlass.remove();
-      delete data.selectionGlass;
+      data.selectionGlass = undefined;
 
       var selected = [], unselected = [];
       for (var i = data.selectables.length - 1; i >= 0; i--) {
         (data.selectables[i].selected ? selected : unselected).push(
             data.selectables[i].element);
       }
-      delete data.selectables;
+      data.selectables = undefined;
 
       // If selection ever started (we moved past the threshold distance),
       // fire the completion events.
